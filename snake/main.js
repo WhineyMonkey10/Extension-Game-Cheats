@@ -1,59 +1,69 @@
-// Developed by @WhineyMonkey10
-// Version: 1.0.0
-// License: MIT
-// Enjoy!
+// User Interface
 
-// User Interface, real one coming soon
+// Create a button that can be dragged around and out of the extension window
+// Then inject the button into the page
 
+var button = document.createElement("button");
+button.innerHTML = "Set high score";
+button.style.position = "fixed";
+button.style.top = "0px";
+button.style.left = "0px";
+button.style.zIndex = "9999";
+button.style.borderRadius = "0px";
+button.style.border = "none";
+button.style.padding = "10px";
+button.style.backgroundColor = "#ffffff";
+button.style.color = "#000000";
+button.style.fontFamily = "Arial";
+button.style.fontSize = "20px";
+button.style.cursor = "pointer";
+button.style.outline = "none";
+button.style.userSelect = "none";
 
-// Main function
-alert("Injecting Snake Hacks... (1/2)")
-document.addEventListener("keyup",function(evt){
-    if(evt.keyCode=="67"&&evt.altKey&&evt.ctrlKey){
-        main();
-    }});
-alert("Injecting Snake Hacks... (2/2)")
-wait(1000);
-alert("🧊 Welcome to Snake Hack! Some features are still in development. 🧊\n\nPress CTRL + ALT + C to open the cheat panel. \n\n🧊 Enjoy! 🧊");
-function main() {
-    // Get the user's input
-    var input = prompt("                                           🧊 -- Cheat Panel -- 🧊\n\nSet High Score (1)\n\nInsta Die (2)\n\nMake the body longer (3)\n\nSet temporary speed (4)\n\nGo back to the main menu (5)\n\nSet permanent gravity (6)\n\n🧊 More Coming Soon <3 🧊");
-    // Check if the user's input is valid
-    if (input == null || input == "") {
-        // If the user's input is invalid, show an error
-        alert("You need to enter something to hack!");
-    } else {
-     
+document.body.appendChild(button);
 
-        // Start the hack
-        if (input == "1") {
-            let score = prompt("Enter the high score you want to set ");
-            localStorage.setItem("_hscore", score);
-        } else if (input == "2") {
-            snake.die()
-        } else if (input == "3") {
-            let length = prompt("Enter the how many body parts you want to add ");
-            for (let i = 0; i < length; i++) {
-                snake.appendNew();
-            }
-        } else if (input == "4") {
-            let speed = prompt("Enter the speed you want to set (needs to be redone everytime you die) ");
-            window.Game.speedMultiplier = speed;
-        } else if (input == "5") {
-            window.Game.player.playerState = 2;
-            
-        } else if (input == "6") {
-            let gravity = prompt("Enter the gravity you want to set ");
-            window.Game.gravity = gravity;
+// Check if the button is being clicked, and if it is, then alert "Hello!"
+
+button.addEventListener("click", function () {
+  var score = parseInt(prompt("Enter the high score you want to set: "));
+  localStorage.setItem("_hscore", score);
+});
+
+// Check if the button is being dragged
+// If it is, then set the button's position to the mouse's position
+
+var dragging = false;
+
+button.addEventListener("mousedown", function () {
+  dragging = true;
+});
+
+document.addEventListener("mouseup", function () {
+  dragging = false;
+  // Cancel the button's drag if it is dragged out of the extension window
+    if (parseInt(button.style.top) < 0) {
+        button.style.top = "0px";
+        }
+    if (parseInt(button.style.left) < 0) {
+        button.style.left = "0px";
+        }
+    if (parseInt(button.style.top) > window.innerHeight - 50) {
+        button.style.top = window.innerHeight - 50 + "px";
+        }
+    if (parseInt(button.style.left) > window.innerWidth - 200) {
+        button.style.left = window.innerWidth - 200 + "px";
         }
 
-}
-    }
 
-function wait(ms) {
-    var start = new Date().getTime();
-    var end = start;
-    while (end < start + ms) {
-        end = new Date().getTime();
-    }
-}
+
+});
+
+
+// Check if the page is refreshed, if it is, 
+
+document.addEventListener("mousemove", function (e) {
+  if (dragging == true) {
+    button.style.top = e.clientY + "px";
+    button.style.left = e.clientX + "px";
+  }
+});
